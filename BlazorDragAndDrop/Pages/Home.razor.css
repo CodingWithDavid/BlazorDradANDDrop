@@ -1,0 +1,78 @@
+﻿.container {
+    margin-top: 20px;
+}
+
+.villain-container {
+    min-height: 400px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+    .villain-container.drag-over {
+        border-color: #007bff;
+        background-color: #e3f2fd;
+    }
+
+.threat-list {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+.villain-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    cursor: move;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+    .villain-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .villain-card.threat {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    }
+
+    .villain-card.dragging {
+        opacity: 0.5;
+        transform: rotate(5deg);
+    }
+
+.villain-name {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.villain-description {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.empty-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 50px 20px;
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+h3 {
+    color: #34495e;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}

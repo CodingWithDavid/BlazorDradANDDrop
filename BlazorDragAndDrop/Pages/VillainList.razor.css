@@ -1,0 +1,58 @@
+﻿.villain-list {
+    max-width: 600px;
+    margin: 20px 0;
+}
+
+.villain-item {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    transition: all 0.2s ease;
+}
+
+    .villain-item:hover {
+        background: #e9ecef;
+        border-color: #6c757d;
+    }
+
+    .villain-item.dragging {
+        opacity: 0.5;
+        transform: rotate(2deg);
+        background: #fff3cd;
+        border-color: #ffc107;
+    }
+
+    .villain-item.drop-target {
+        border-color: #198754;
+        background: #d1e7dd;
+        border-style: dashed;
+    }
+
+.villain-content {
+    flex: 1;
+}
+
+    .villain-content h4 {
+        margin: 0 0 5px 0;
+        color: #495057;
+    }
+
+    .villain-content p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 0.9em;
+    }
+
+.drag-handle {
+    font-size: 20px;
+    color: #6c757d;
+    margin-left: 10px;
+    user-select: none;
+}
+

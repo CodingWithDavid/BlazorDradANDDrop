@@ -1,0 +1,126 @@
+﻿@page "/"
+
+@using BlazorDragAndDrop.Models
+
+<PageTitle>Batman Villains Drag & Drop</PageTitle>
+
+<h1>Batman Villains</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Available Villains</h3>
+            <div class="villain-container" @ondrop="@(() => HandleDrop("available"))" @ondragover="@HandleDragOver" @ondragover:preventDefault="true">
+                @foreach (var villain in AvailableVillains)
+                {
+                    <div class="villain-card" 
+                         draggable="true" 
+                         @ondragstart="@(() => HandleDragStart(villain))"
+                         @ondragend="@HandleDragEnd">
+                        <div class="villain-name">@villain.Name</div>
+                        <div class="villain-description">@villain.Description</div>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h3>Active Threat List</h3>
+            <div class="villain-container threat-list" @ondrop="@(() => HandleDrop("threats"))" @ondragover="@HandleDragOver" @ondragover:preventDefault="true">
+                @if (ThreatVillains.Any())
+                {
+                    @foreach (var villain in ThreatVillains)
+                    {
+                        <div class="villain-card threat" 
+                             draggable="true" 
+                             @ondragstart="@(() => HandleDragStart(villain))"
+                             @ondragend="@HandleDragEnd">
+                            <div class="villain-name">@villain.Name</div>
+                            <div class="villain-description">@villain.Description</div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="empty-message">Drop villains here to add them to the threat list</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Villain> AvailableVillains = new();
+    private List<Villain> ThreatVillains = new();
+    private Villain? DraggedVillain;
+    private string DraggedFromContainer = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        AvailableVillains = new List<Villain>
+        {
+            new Villain { Name = "The Joker", Description = "Clown Prince of Crime with a twisted sense of humor" },
+            new Villain { Name = "Harley Quinn", Description = "Former psychiatrist turned chaotic accomplice" },
+            new Villain { Name = "The Penguin", Description = "Crime boss with a bird obsession and umbrella weapons" },
+            new Villain { Name = "The Riddler", Description = "Obsessed with puzzles and riddles, intellectual criminal" },
+            new Villain { Name = "Two-Face", Description = "Former DA Harvey Dent with split personality disorder" },
+            new Villain { Name = "Poison Ivy", Description = "Eco-terrorist with plant manipulation powers" },
+            new Villain { Name = "Scarecrow", Description = "Fear-inducing psychologist with toxin-based weapons" },
+            new Villain { Name = "Mr. Freeze", Description = "Cryogenic criminal trying to save his wife" },
+            new Villain { Name = "Bane", Description = "Intelligent brute with super-strength from Venom" },
+            new Villain { Name = "Catwoman", Description = "Master thief with feline agility and cat burglar skills" },
+            new Villain { Name = "Ra's al Ghul", Description = "Immortal eco-terrorist and leader of League of Assassins" },
+            new Villain { Name = "Clayface", Description = "Shape-shifting monster made of clay" }
+        };
+    }
+
+    private void HandleDragStart(Villain villain)
+    {
+        DraggedVillain = villain;
+        DraggedFromContainer = AvailableVillains.Contains(villain) ? "available" : "threats";
+    }
+
+    private void HandleDragEnd()
+    {
+        // Reset dragged state
+        DraggedVillain = null;
+        DraggedFromContainer = string.Empty;
+        StateHasChanged();
+    }
+
+    private void HandleDragOver()
+    {
+        // This method is required for the drop to work
+        // The preventDefault is handled by the @ondragover:preventDefault="true" attribute
+    }
+
+    private void HandleDrop(string targetContainer)
+    {
+        if (DraggedVillain == null) return;
+
+        // Remove from source container
+        if (DraggedFromContainer == "available")
+        {
+            AvailableVillains.Remove(DraggedVillain);
+        }
+        else if (DraggedFromContainer == "threats")
+        {
+            ThreatVillains.Remove(DraggedVillain);
+        }
+
+        // Add to target container
+        if (targetContainer == "available")
+        {
+            AvailableVillains.Add(DraggedVillain);
+        }
+        else if (targetContainer == "threats")
+        {
+            ThreatVillains.Add(DraggedVillain);
+        }
+
+        // Reset drag state
+        DraggedVillain = null;
+        DraggedFromContainer = string.Empty;
+        StateHasChanged();
+    }
+}

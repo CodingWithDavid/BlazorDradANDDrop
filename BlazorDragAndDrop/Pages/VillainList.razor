@@ -1,0 +1,96 @@
+﻿@page "/villainList"
+@using BlazorDragAndDrop.Models
+
+<PageTitle>Batman Villains</PageTitle>
+
+<h1>Batman Villains</h1>
+
+<p>Drag and drop to reorder the villains!</p>
+
+<div class="villain-list">
+    @for (int i = 0; i < villains.Count; i++)
+    {
+        var index = i; // Capture the index for the lambda
+        var villain = villains[index];
+        
+        <div class="villain-item @(draggedIndex == index ? "dragging" : "") @(dropTargetIndex == index ? "drop-target" : "")"
+             draggable="true"
+             @ondragstart="() => OnDragStart(index)"
+             @ondragover="() => OnDragOver(index)"
+             @ondragover:preventDefault="true"
+             @ondrop="() => OnDrop(index)"
+             @ondragend="OnDragEnd"
+             @ondragleave="OnDragLeave">
+            
+            <div class="villain-content">
+                <h4>@villain.Name</h4>
+                <p>@villain.Description</p>
+            </div>
+            <div class="drag-handle">⋮⋮</div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Villain> villains = new();
+    private int draggedIndex = -1;
+    private int dropTargetIndex = -1;
+
+    protected override void OnInitialized()
+    {
+        villains = new List<Villain>
+        {
+            new Villain { Name = "The Joker", Description = "The Clown Prince of Crime, Batman's greatest nemesis with a twisted sense of humor." },
+            new Villain { Name = "Harley Quinn", Description = "Former psychiatrist turned chaotic criminal, the Joker's devoted accomplice." },
+            new Villain { Name = "Penguin", Description = "Oswald Cobblepot, the sophisticated crime lord with a bird obsession." },
+            new Villain { Name = "Riddler", Description = "Edward Nygma, the puzzle-obsessed criminal who challenges Batman with riddles." },
+            new Villain { Name = "Two-Face", Description = "Harvey Dent, the former district attorney whose dual personality drives his crimes." },
+            new Villain { Name = "Poison Ivy", Description = "Pamela Isley, the plant-loving eco-terrorist with deadly botanical powers." },
+            new Villain { Name = "Scarecrow", Description = "Dr. Jonathan Crane, the fear-obsessed psychiatrist who uses terror as a weapon." },
+            new Villain { Name = "Mr. Freeze", Description = "Dr. Victor Fries, the cryogenic criminal trying to save his frozen wife." },
+            new Villain { Name = "Bane", Description = "The masked mercenary who broke Batman's back, enhanced by the drug Venom." },
+            new Villain { Name = "Catwoman", Description = "Selina Kyle, the cat burglar who walks the line between hero and villain." }
+        };
+    }
+
+    private void OnDragStart(int index)
+    {
+        draggedIndex = index;
+    }
+
+    private void OnDragOver(int index)
+    {
+        if (draggedIndex != -1 && draggedIndex != index)
+        {
+            dropTargetIndex = index;
+        }
+    }
+
+    private void OnDrop(int index)
+    {
+        if (draggedIndex != -1 && draggedIndex != index)
+        {
+            var draggedVillain = villains[draggedIndex];
+            villains.RemoveAt(draggedIndex);
+            
+            // Adjust the target index if we removed an item before it
+            var targetIndex = draggedIndex < index ? index - 1 : index;
+            villains.Insert(targetIndex, draggedVillain);
+        }
+        
+        OnDragEnd();
+    }
+
+    private void OnDragEnd()
+    {
+        draggedIndex = -1;
+        dropTargetIndex = -1;
+    }
+
+    private void OnDragLeave()
+    {
+        dropTargetIndex = -1;
+    }
+}
+
+
